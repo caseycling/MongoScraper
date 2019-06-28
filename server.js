@@ -27,3 +27,7 @@ app.set("view engine", "handlebars")
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
+//Connect to Mongo
+mongoose.connect("mongodb://localhost/scraper", { useNewUrlParser: true });
+
+//Routes
