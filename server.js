@@ -30,6 +30,9 @@ app.use(express.json());
 //Connect to Mongo
 mongoose.connect("mongodb://localhost/scraper", { useNewUrlParser: true });
 
+// Use express.static to serve the public folder as a static directory
+app.use(express.static("public"));
+
 //Routes
 
 //GET route for displaying unsaved articles in root route
@@ -65,6 +68,8 @@ app.get("/scrape", function(req, res) {
             .then(function(dbArticle) {
                 //View result in console
                 console.log(dbArticle)
+                //Render results to index
+                
             })
             .catch(function(err) {
                 console.log(err)
@@ -72,3 +77,9 @@ app.get("/scrape", function(req, res) {
         })
     })
 })
+
+// Start the server
+app.listen(PORT, function() {
+    console.log("App running on port " + PORT + "!");
+  });
+  
