@@ -4,6 +4,7 @@ var exphbs = require("express-handlebars")
 var mongoose = require("mongoose")
 var axios = require("axios")
 var cheerio = require("cheerio")
+var path = require("path")
 
 //Import models
 var db = require("./models")
@@ -15,12 +16,13 @@ var app = express();
 
 //Initialize handlebars
 app.engine("handlebars", exphbs({
-    defaultLayout: "index" 
+    defaultLayout: "main" 
     })
 );
 
 //Set view engine
 app.set("view engine", "handlebars")
+
 
 
 //Middleware
@@ -31,15 +33,20 @@ app.use(express.json());
 mongoose.connect("mongodb://localhost/scraper", { useNewUrlParser: true });
 
 // Use express.static to serve the public folder as a static directory
-app.use(express.static("public"));
+app.use(express.static("views"));
 
 //Routes
 
 //GET route for displaying unsaved articles in root route
 app.get("/", function(req, res) {
     db.Article.find({ saved: false})
-    .then(function(unsavedArticle) {
-        res.json(unsavedArticle)
+    .then(function(data, err) {
+        var hbsObject = {
+            articles: data
+        }
+        console.log(hbsObject)
+        res.render("index", hbsObject)
+       
     })
     .catch(function(err) {
         res.json(err)
