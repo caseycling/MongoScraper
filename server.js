@@ -59,18 +59,16 @@ app.get("/scrape", function(req, res) {
 
             //Object properties with values scraped from website
             result.title = $(this).find("a").find("h2").html().replace("<span>","").replace("</span>", "");
-            result.summary = $(this).find("a").children("ul").html().replace("<li>","").replace("</li>","");
+            result.summary = $(this).find("a").children("ul").html().replace("<li>","").replace("</li>","").replace("<li>","").replace("</li>","");
             result.href = $(this).find("a").attr("href")
             result.saved = false;
-
-            console.log(result);
 
             //Create new article using result object
             db.Article.create(result)
             .then(function(dbArticle) {
-                //View result in console
-                //console.log(dbArticle)
-                //Render results to index
+                // View result in console
+                console.log(dbArticle)
+                // Render results to index
                 
             })
             .catch(function(err) {
