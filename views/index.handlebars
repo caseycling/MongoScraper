@@ -1,0 +1,18 @@
+<img src="/assets/img/burger.png" alt="Burger">
+<ul>
+    {{!-- Display each item within the key burgers imported from the controller --}}
+    {{#each articles}}
+        {{!-- UNLESS devoured is true --}}
+        {{#unless saved}}
+            <li>
+                <p id={{this.id}}> 
+                    {{!-- Value of burger_name from the imported object --}}
+                    {{this.title}}.
+                    {{this.summary}}
+                    {{this.href}}
+                    <button class="devour" data-burgid={{this.id}}>Devour it</button>
+                </p>
+            </li>
+        {{/unless}}
+    {{/each}}
+</ul>
