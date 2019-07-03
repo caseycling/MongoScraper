@@ -53,21 +53,23 @@ app.get("/scrape", function(req, res) {
         
         var $ = cheerio.load(response.data)
 
-        $("div.css-qvz0vj ").each(function(i, element) {
+        $("section[data-block-tracking-id='Top Stories'] article").each(function(i, element) {
             //Empty object to save results
             var result ={}
 
             //Object properties with values scraped from website
-            result.title = $(this).children("h2.css-n2blzn").text()
-            result.summary = $(this).children("p").text()
+            result.title = $(this).find("a").find("h2").html().replace("<span>","").replace("</span>", "");
+            result.summary = $(this).find("a").children("ul").html().replace("<li>","").replace("</li>","");
             result.href = $(this).find("a").attr("href")
             result.saved = false;
+
+            console.log(result);
 
             //Create new article using result object
             db.Article.create(result)
             .then(function(dbArticle) {
                 //View result in console
-                console.log(dbArticle)
+                //console.log(dbArticle)
                 //Render results to index
                 
             })
@@ -78,6 +80,16 @@ app.get("/scrape", function(req, res) {
     })
 })
 
+//Get route to display saved articles
+app.get("/saved", function(req, res) {
+    db.Article.find({ saved: true })
+    .then(function(savedArticles) {
+        res.json(savedArticles)
+    })
+    .catch(function(err) {
+        console.log(err)
+    })
+})
 // Start the server
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + "!");
