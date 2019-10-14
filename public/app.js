@@ -16,13 +16,16 @@ $.getJSON("/", function(data) {
 
 //On clicking scrape button, use ajax call for "/scrape" route
 $("#scrape").on("click", function() {
+    console.log("hey")
     $.ajax({
         method: "GET",
         url: "/scrape"
     })
-    .then(function(data) {
+    .then(function(data, err) {
         console.log(data);
-        articleRender(data); 
+        res
+        location.reload()
+        // articleRender(data); 
     })
 })
 
@@ -36,3 +39,4 @@ $("#saved").on("click", function() {
         console.log(data)
     })
 })
+

@@ -65,7 +65,7 @@ app.get("/scrape", function(req, res) {
             var result ={}
 
             //Object properties with values scraped from website
-            result.title = $(this).find("a").find("h2").html().replace("<span>","").replace("</span>", "");
+            result.title = $(this).find("a").find("h2").text().replace("<span>","").replace("</span>", "");
             result.summary = $(this).find("a").children("ul").html().replace("<li>","").replace("</li>","").replace("<li>","").replace("</li>","");
             result.href = $(this).find("a").attr("href")
             result.saved = false;
@@ -75,6 +75,11 @@ app.get("/scrape", function(req, res) {
             .then(function(dbArticle) {
                 // View result in console
                 console.log(dbArticle)
+                hbsObj = {
+                    articles: dbArticle
+                }
+
+                // location.reload();
                 // Render results to index
                 
             })
@@ -88,8 +93,11 @@ app.get("/scrape", function(req, res) {
 //Get route to display saved articles
 app.get("/saved", function(req, res) {
     db.Article.find({ saved: true })
-    .then(function(savedArticles) {
-        res.json(savedArticles)
+    .then(function(data, err) {
+        hbsObj = {
+            articles: data
+        }
+        res.render("saved", hbsObj)
     })
     .catch(function(err) {
         console.log(err)
